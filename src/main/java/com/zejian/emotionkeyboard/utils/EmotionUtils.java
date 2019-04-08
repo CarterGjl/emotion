@@ -1,7 +1,7 @@
 
 package com.zejian.emotionkeyboard.utils;
 
-import android.support.v4.util.ArrayMap;
+import androidx.collection.ArrayMap;
 
 import com.zejian.emotionkeyboard.R;
 

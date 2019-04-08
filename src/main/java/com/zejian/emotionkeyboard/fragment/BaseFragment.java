@@ -1,7 +1,7 @@
 package com.zejian.emotionkeyboard.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by zejian
@@ -20,22 +20,24 @@ public class BaseFragment extends Fragment{
      * @param args 传递的参数
      * @return
      */
-    public static <T extends Fragment>T newInstance(Class clazz,Bundle args) {
+    public static <T extends Fragment>T newInstance(Class<T> clazz,Bundle args) {
         T mFragment=null;
         try {
-            mFragment= (T) clazz.newInstance();
+            mFragment= clazz.newInstance();
         } catch (java.lang.InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        mFragment.setArguments(args);
+        if (mFragment != null) {
+            mFragment.setArguments(args);
+        }
         return mFragment;
     }
 
     /**
      * 初始创建Fragment对象时调用
-     * @param savedInstanceState
+     * @param savedInstanceState s
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {

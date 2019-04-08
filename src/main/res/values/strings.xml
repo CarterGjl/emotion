@@ -2,4 +2,22 @@
     <string name="app_name">EmotionKeyBoard</string>
 
     <string name="btn_send">发送</string>
+    <string name="message_tip_3">Record is too short</string>
+    <string name="message_btn_4">Release Send</string>
+    <string name="message_btn_3">Hold To Talk</string>
+    <string name="message_title_18">Release to cancel</string>
+    <string name="message_title_16">Slide up to cancel</string>
+    <string name="recordding"><![CDATA[Recording&#8230;]]></string>
+    <string name="record_time_too_short">Record is too short</string>
+
+    <string name="chat_msgtype_piclocal">照片</string>
+    <string name="chat_msgtype_piccamera">拍摄</string>
+    <string name="chat_msgtype_videolocal">视频</string>
+    <string name="chat_msgtype_videocamera">拍摄</string>
+    <string name="chat_msgtype_audio">语音通话</string>
+    <string name="chat_msgtype_location">位置</string>
+    <string name="chat_msgtype_contact">名片</string>
+    <string name="chat_option_destrct">私密聊天</string>
+    <string name="chat_subtitle_destrct">阅后即焚会话</string>
+    <string name="chat_subtitle_location">带位置会话</string>
 </resources>

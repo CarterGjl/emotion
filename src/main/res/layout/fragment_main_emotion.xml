@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <include
@@ -9,30 +11,60 @@
         layout="@layout/include_emotion_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
     <LinearLayout
         android:id="@+id/ll_emotion_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
+        tools:visibility="visible"
         android:visibility="gone">
 
-        <com.zejian.emotionkeyboard.emotionkeyboardview.NoHorizontalScrollerViewPager
-            android:id="@+id/vp_emotionview_layout"
+        <ViewSwitcher
+            android:id="@+id/more_emotion_switcher"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent">
+            <FrameLayout
+                android:id="@+id/more_option"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/bg_horizontal_line_color" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/option_re"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/custom_production_mode_griditem_item" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            </FrameLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/emotion_panel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.zejian.emotionkeyboard.emotionkeyboardview.NoHorizontalScrollerViewPager
+                    android:id="@+id/vp_emotionview_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/bg_horizontal_line_color" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+            </LinearLayout>
+
+
+
+
+        </ViewSwitcher>
+
 
     </LinearLayout>
 </LinearLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frameLayout"
+    android:layout_width="170dp"
+    android:layout_height="170dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="@drawable/release_to_cancel"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/voice_rcd_icon_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:gravity="bottom|center"
+        android:visibility="visible"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="62dp"
+            android:layout_height="86dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="1dip"
+            android:src="@drawable/voice_rcd_hint_wechat" />
+
+        <ImageView
+            android:id="@+id/voice_rcd_hint_anim"
+            android:layout_width="62dp"
+            android:layout_height="86dp"
+            android:layout_marginStart="-8dp"
+            android:layout_marginBottom="1dip"
+            android:background="@drawable/amp1" />
+        <RelativeLayout
+            android:id="@+id/record_dialog_cancel_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="bottom|center"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_marginEnd="6dp"
+                app:srcCompat="@drawable/ic_cancel" />
+            <!--<ImageView-->
+            <!--android:id="@+id/record_dialog_cancel"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/rcding_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/chat_margin"
+        android:layout_marginEnd="@dimen/chat_margin"
+        android:gravity="center_horizontal"
+        android:text="@string/recordding"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:visibility="visible" />
+
+</LinearLayout>

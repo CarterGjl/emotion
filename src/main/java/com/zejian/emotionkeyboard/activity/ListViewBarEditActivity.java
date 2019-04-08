@@ -2,12 +2,22 @@ package com.zejian.emotionkeyboard.activity;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.emoji.text.EmojiCompat;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.Editable;
+import android.text.SpannableString;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.zejian.emotionkeyboard.R;
 import com.zejian.emotionkeyboard.fragment.EmotionMainFragment;
+import com.zejian.emotionkeyboard.utils.EmotionUtils;
+import com.zejian.emotionkeyboard.utils.SpanStringUtils;
 
 /**
  * Created by zejian
@@ -21,6 +31,14 @@ public class ListViewBarEditActivity extends AppCompatActivity{
     private EmotionMainFragment emotionMainFragment;
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+//        emotionMainFragment.isInterceptBackPress();
+        View currentFocus = getCurrentFocus();
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -30,12 +48,18 @@ public class ListViewBarEditActivity extends AppCompatActivity{
         initDatas();
     }
 
+    private TextView mTv;
+
     /**
      * 初始化控件
      */
     private void initView()
     {
-        listView= (ListView) findViewById(R.id.listview);
+        listView= findViewById(R.id.listview);
+
+
+        mTv = findViewById(R.id.tv);
+
     }
 
     /**
@@ -85,4 +109,13 @@ public class ListViewBarEditActivity extends AppCompatActivity{
         }
     }
 
+    public void click(View view) {
+
+        Editable text = emotionMainFragment.bar_edit_text.getText();
+
+//        CharSequence sequence = EmojiCompat.get().process("[哈哈]" + text);
+        SpannableString emotionContent = SpanStringUtils.getEmotionContent(EmotionUtils.EMOTION_CLASSIC_TYPE, this, mTv,
+                text.toString());
+        mTv.setText(emotionContent);
+    }
 }

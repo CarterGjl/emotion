@@ -1,5 +1,7 @@
 package com.zejian.emotionkeyboard.utils;
 
+///获得屏幕相关的辅助类
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,34 +10,10 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
-/**
- * Created by WuZeJian
- * Time：2015/9/14 8:23
- * Email：shinezejian@163.com
- * Description：获得屏幕相关的辅助类
- */
-
 public class ScreenUtils {
-    private ScreenUtils()
-    {
-		/* cannot be instantiated */
+    private ScreenUtils() {
+        /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
-    }
-
-    /**
-     * 获得屏幕宽度
-     *
-     * @param context
-     * @return
-     */
-    public static int getScreenWidth(Context context)
-    {
-        WindowManager wm = (WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE);
-
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);//将当前窗口的信息放在DisplayMetrics类中
-        return outMetrics.widthPixels;
     }
 
     /**
@@ -44,8 +22,21 @@ public class ScreenUtils {
      * @param context
      * @return
      */
-    public static int getScreenHeight(Context context)
-    {
+    public static int getScreenWidth(Context context) {
+        WindowManager wm = (WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
+    }
+
+    /**
+     * 获得屏幕宽度
+     *
+     * @param context
+     * @return
+     */
+    public static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -54,41 +45,21 @@ public class ScreenUtils {
     }
 
     /**
-     * 获取分辨率
-     *
-     * @param context
-     * @return
-     */
-    public static int getScreenResolution(Context context)
-    {
-        WindowManager wm = (WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        int width = outMetrics.widthPixels;
-        int height = outMetrics.heightPixels;
-        return width*height;
-    }
-
-    /**
      * 获得状态栏的高度
      *
      * @param context
      * @return
      */
-    public static int getStatusHeight(Context context)
-    {
+    public static int getStatusHeight(Context context) {
 
         int statusHeight = -1;
-        try
-        {
+        try {
             Class<?> clazz = Class.forName("com.android.internal.R$dimen");
             Object object = clazz.newInstance();
             int height = Integer.parseInt(clazz.getField("status_bar_height")
                     .get(object).toString());
             statusHeight = context.getResources().getDimensionPixelSize(height);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return statusHeight;
@@ -100,8 +71,7 @@ public class ScreenUtils {
      * @param activity
      * @return
      */
-    public static Bitmap snapShotWithStatusBar(Activity activity)
-    {
+    public static Bitmap snapShotWithStatusBar(Activity activity) {
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
@@ -121,8 +91,7 @@ public class ScreenUtils {
      * @param activity
      * @return
      */
-    public static Bitmap snapShotWithoutStatusBar(Activity activity)
-    {
+    public static Bitmap snapShotWithoutStatusBar(Activity activity) {
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
@@ -140,6 +109,5 @@ public class ScreenUtils {
         return bp;
 
     }
-
 
 }

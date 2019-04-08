@@ -1,29 +1,45 @@
 package com.zejian.emotionkeyboard.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.zejian.emotionkeyboard.R;
+import com.zejian.emotionkeyboard.adapter.EvenItemDecoration;
 import com.zejian.emotionkeyboard.adapter.HorizontalRecyclerviewAdapter;
+import com.zejian.emotionkeyboard.adapter.MoreOptionAdapter;
 import com.zejian.emotionkeyboard.adapter.NoHorizontalScrollerVPAdapter;
 import com.zejian.emotionkeyboard.emotionkeyboardview.EmotionKeyboard;
 import com.zejian.emotionkeyboard.emotionkeyboardview.NoHorizontalScrollerViewPager;
 import com.zejian.emotionkeyboard.model.ImageModel;
+import com.zejian.emotionkeyboard.utils.ChatMsgType;
+import com.zejian.emotionkeyboard.utils.DataUtils;
+import com.zejian.emotionkeyboard.utils.DisplayUtils;
 import com.zejian.emotionkeyboard.utils.EmotionUtils;
 import com.zejian.emotionkeyboard.utils.GlobalOnItemClickManagerUtils;
+import com.zejian.emotionkeyboard.utils.ScreenUtils;
 import com.zejian.emotionkeyboard.utils.SharedPreferencedUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by zejian
@@ -47,8 +63,8 @@ public class EmotionMainFragment extends BaseFragment {
     //表情面板
     private EmotionKeyboard mEmotionKeyboard;
 
-    private EditText bar_edit_text;
-    private ImageView bar_image_add_btn;
+    public EditText bar_edit_text;
+    private ImageView bar_image_voice_btn;
     private Button bar_btn_send;
     private LinearLayout rl_editbar_bg;
 
@@ -70,25 +86,30 @@ public class EmotionMainFragment extends BaseFragment {
 
     /**
      * 创建与Fragment对象关联的View视图时调用
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
+     * @param inflater i
+     * @param container c
+     * @param savedInstanceState  s
      * @return
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_emotion, container, false);
         isHidenBarEditTextAndBtn= args.getBoolean(EmotionMainFragment.HIDE_BAR_EDITTEXT_AND_BTN);
         //获取判断绑定对象的参数
         isBindToBarEditText=args.getBoolean(EmotionMainFragment.BIND_TO_EDITTEXT);
         initView(rootView);
-        mEmotionKeyboard = EmotionKeyboard.with(getActivity())
-                .setEmotionView(rootView.findViewById(R.id.ll_emotion_layout))//绑定表情面板
-                .bindToContent(contentView)//绑定内容view
-                .bindToEditText(!isBindToBarEditText ? ((EditText) contentView) : ((EditText) rootView.findViewById(R.id.bar_edit_text)))//判断绑定那种EditView
-                .bindToEmotionButton(rootView.findViewById(R.id.emotion_button))//绑定表情按钮
-                .build();
+        if (getActivity() != null) {
+            mEmotionKeyboard = EmotionKeyboard.with(getActivity())
+                    .bindToSwicher(mMoreEmotionSwitcher)
+                    .setEmotionView(rootView.findViewById(R.id.ll_emotion_layout))//绑定表情面板
+                    .bindToContent(contentView)//绑定内容view
+                    .bindToEditText(!isBindToBarEditText ? ((EditText) contentView) : ((EditText) rootView.findViewById(R.id.bar_edit_text)))//判断绑定那种EditView
+                    .bindToEmotionButton(rootView.findViewById(R.id.emotion_button))//绑定表情按钮
+                    .bindToMoreOptionButton(rootView.findViewById(R.id.btn_more))
+                    .build();
+        }
         initListener();
+        initMoreOptionData();
         initDatas();
         //创建全局监听
         GlobalOnItemClickManagerUtils globalOnItemClickManager= GlobalOnItemClickManagerUtils.getInstance(getActivity());
@@ -105,36 +126,123 @@ public class EmotionMainFragment extends BaseFragment {
         return rootView;
     }
 
+    private void initMoreOptionData() {
+        if (getActivity() != null) {
+            List<ChatMsgType> chatOptionDataListByType = DataUtils.getChatOptionDataListByType(getActivity(),
+                    true);
+            PagerSnapHelper linearSnapHelper = new PagerSnapHelper();
+            linearSnapHelper.attachToRecyclerView(mOptionRe);
+            MoreOptionAdapter moreOptionAdapter = new MoreOptionAdapter(chatOptionDataListByType);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4,
+                    RecyclerView.VERTICAL, false);
+//            final float scale = getContext().getResources().getDisplayMetrics().density;
+//            int i = (int) (26 * scale + 0.5f);
+            int screenWidth = ScreenUtils.getScreenWidth(getContext());
+            int itemWidtg = DisplayUtils.dp2px(getContext(), 90);
+            mOptionRe.addItemDecoration(new EvenItemDecoration((screenWidth-itemWidtg*4)/6,3));
+            mOptionRe.setLayoutManager(gridLayoutManager);
+
+            mOptionRe.setAdapter(moreOptionAdapter);
+        }
+
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     /**
      * 绑定内容view
-     * @param contentView
+     * @param contentView content
      * @return
      */
     public void bindToContentView(View contentView){
         this.contentView=contentView;
     }
 
+    private ViewSwitcher mViewSwitch;
+    private ViewSwitcher mVKeySwitcher;
+    private ImageButton mChattingModeKeybroadBtn;
+    private ViewSwitcher mEtRbSwitcher;
+    private Button mBtnMore;
+    private ViewSwitcher mMoreEmotionSwitcher;
+    private RecyclerView mOptionRe;
+
     /**
      * 初始化view控件
      */
     protected void initView(View rootView){
-        viewPager= (NoHorizontalScrollerViewPager) rootView.findViewById(R.id.vp_emotionview_layout);
-        recyclerview_horizontal= (RecyclerView) rootView.findViewById(R.id.recyclerview_horizontal);
-        bar_edit_text= (EditText) rootView.findViewById(R.id.bar_edit_text);
-        bar_image_add_btn= (ImageView) rootView.findViewById(R.id.bar_image_add_btn);
-        bar_btn_send= (Button) rootView.findViewById(R.id.bar_btn_send);
-        rl_editbar_bg= (LinearLayout) rootView.findViewById(R.id.rl_editbar_bg);
+        viewPager = rootView.findViewById(R.id.vp_emotionview_layout);
+        recyclerview_horizontal = rootView.findViewById(R.id.recyclerview_horizontal);
+        bar_edit_text = rootView.findViewById(R.id.bar_edit_text);
+        bar_image_voice_btn = rootView.findViewById(R.id.bar_image_voice);
+        mChattingModeKeybroadBtn = rootView.findViewById(R.id.chatting_mode_keybroad_btn);
+        bar_btn_send = rootView.findViewById(R.id.bar_btn_send);
+        rl_editbar_bg = rootView.findViewById(R.id.rl_editbar_bg);
+
+        mOptionRe = rootView.findViewById(R.id.option_re);
+
+        mMoreEmotionSwitcher = rootView.findViewById(R.id.more_emotion_switcher);
+
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3,
+//                GridLayoutManager.HORIZONTAL,false);
+        mBtnMore = rootView.findViewById(R.id.btn_more);
+
+        mEtRbSwitcher = rootView.findViewById(R.id.et_rb_switcher);
+
+
+        mViewSwitch = rootView.findViewById(R.id.view_switch);
+
+        mVKeySwitcher = rootView.findViewById(R.id.v_key_switcher);
+
+        bar_image_voice_btn.setOnClickListener(v -> {
+            mVKeySwitcher.setDisplayedChild(1);
+            mEtRbSwitcher.setDisplayedChild(1);
+            mEmotionKeyboard.hideSoftInput();
+            mEmotionKeyboard.hideEmotionLayout(false);
+        });
+
+        mChattingModeKeybroadBtn.setOnClickListener(v -> {
+            mVKeySwitcher.setDisplayedChild(0);
+            mEtRbSwitcher.setDisplayedChild(0);
+            mEmotionKeyboard.hideEmotionLayout(true);
+            mEmotionKeyboard.showSoftInput();
+        });
+        mViewSwitch.setDisplayedChild(0);
         if(isHidenBarEditTextAndBtn){//隐藏
             bar_edit_text.setVisibility(View.GONE);
-            bar_image_add_btn.setVisibility(View.GONE);
+            bar_image_voice_btn.setVisibility(View.GONE);
             bar_btn_send.setVisibility(View.GONE);
             rl_editbar_bg.setBackgroundResource(R.color.bg_edittext_color);
         }else{
-            bar_edit_text.setVisibility(View.VISIBLE);
-            bar_image_add_btn.setVisibility(View.VISIBLE);
-            bar_btn_send.setVisibility(View.VISIBLE);
+//            bar_edit_text.setVisibility(View.VISIBLE);
+//            bar_image_voice_btn.setVisibility(View.VISIBLE);
+//            bar_btn_send.setVisibility(View.VISIBLE);
             rl_editbar_bg.setBackgroundResource(R.drawable.shape_bg_reply_edittext);
         }
+        bar_edit_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (bar_edit_text.getText().length() > 0) {
+
+                    mViewSwitch.setDisplayedChild(1);
+                } else {
+                    mViewSwitch.setDisplayedChild(0);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     /**
@@ -209,7 +317,7 @@ public class EmotionMainFragment extends BaseFragment {
         //创建修改实例
         EmotiomComplateFragment f1= (EmotiomComplateFragment) factory.getFragment(EmotionUtils.EMOTION_CLASSIC_TYPE);
         fragments.add(f1);
-        Bundle b=null;
+        Bundle b;
         for (int i=0;i<7;i++){
             b=new Bundle();
             b.putString("Interge","Fragment-"+i);

@@ -1,7 +1,9 @@
 package com.zejian.emotionkeyboard.fragment;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ public class EmotiomComplateFragment extends BaseFragment {
      * @return
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_complate_emotion, container, false);
         initView(rootView);
         initListener();
@@ -50,8 +52,8 @@ public class EmotiomComplateFragment extends BaseFragment {
      * 初始化view控件
      */
     protected void initView(View rootView){
-        vp_complate_emotion_layout = (ViewPager) rootView.findViewById(R.id.vp_complate_emotion_layout);
-        ll_point_group= (EmojiIndicatorView) rootView.findViewById(R.id.ll_point_group);
+        vp_complate_emotion_layout = rootView.findViewById(R.id.vp_complate_emotion_layout);
+        ll_point_group= rootView.findViewById(R.id.ll_point_group);
         //获取map的类型
         emotion_map_type=args.getInt(FragmentFactory.EMOTION_MAP_TYPE);
         initEmotion();

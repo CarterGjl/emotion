@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -11,8 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eee"
         android:gravity="center_vertical"
+        android:background="#eee"
         android:orientation="horizontal"
         android:paddingBottom="6dp"
         android:paddingLeft="8dp"
@@ -28,14 +28,27 @@
             android:src="@drawable/ic_emotion"
             android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/bar_image_add_btn"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:clickable="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_plus"
-            android:visibility="gone" />
+        <ViewSwitcher
+            android:id="@+id/v_key_switcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/bar_image_voice"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                tools:visibility="visible"
+                android:src="@drawable/chat_icon_voice"
+                android:visibility="gone" />
+            <ImageButton
+                android:id="@+id/chatting_mode_keybroad_btn"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/production_keybroad_selector"
+                android:visibility="gone" />
+        </ViewSwitcher>
+
 
         <LinearLayout
             android:id="@+id/rl_editbar_bg"
@@ -48,32 +61,65 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/bar_edit_text"
+            <ViewSwitcher
+                android:id="@+id/et_rb_switcher"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#0000"
-                android:maxLines="3"
-                android:minHeight="36dp"
-                android:textSize="16sp" />
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/bar_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#0000"
+                    android:maxLines="3"
+                    android:minHeight="36dp"
+                    android:textSize="16sp" />
+                <com.zejian.emotionkeyboard.widget.widget.RecordButton
+                    android:id="@+id/talk_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:minHeight="36dp"
+                    android:gravity="center"
+                    android:text="@string/message_btn_3"
+                    android:textColor="#172434"
+                    android:textSize="16sp" />
+            </ViewSwitcher>
 
-            <ImageView
-                android:id="@+id/emotion_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:clickable="true"
-                android:src="@drawable/ic_emotion" />
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bar_btn_send"
-            android:layout_width="56dp"
+        <ImageView
+            android:id="@+id/emotion_button"
+            android:layout_width="32dp"
             android:layout_height="32dp"
-            android:background="@drawable/shape_bg_button_reply"
-            android:text="@string/btn_send"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:clickable="true"
+            android:src="@drawable/ic_emotion" />
+        <ViewSwitcher
+            android:id="@+id/view_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_more"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_plus" />
+
+            <Button
+                android:id="@+id/bar_btn_send"
+                android:layout_width="38dp"
+                android:layout_height="32dp"
+                android:background="@drawable/shape_bg_button_reply"
+                android:text="@string/btn_send"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+        </ViewSwitcher>
+
     </LinearLayout>
 
     <LinearLayout

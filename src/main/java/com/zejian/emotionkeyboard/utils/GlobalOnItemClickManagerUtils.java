@@ -1,6 +1,8 @@
 package com.zejian.emotionkeyboard.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,8 +18,10 @@ import com.zejian.emotionkeyboard.adapter.EmotionGridViewAdapter;
  */
 public class GlobalOnItemClickManagerUtils {
 
+    @SuppressLint("StaticFieldLeak")
     private static GlobalOnItemClickManagerUtils instance;
     private EditText mEditText;//输入框
+    @SuppressLint("StaticFieldLeak")
     private static Context mContext;
 
     public static GlobalOnItemClickManagerUtils getInstance(Context context) {
@@ -31,6 +35,8 @@ public class GlobalOnItemClickManagerUtils {
         }
         return instance;
     }
+
+    private static final String TAG = "GlobalOnItemClickManage";
 
     public void attachToEditText(EditText editText) {
         mEditText = editText;
@@ -59,6 +65,7 @@ public class GlobalOnItemClickManagerUtils {
                         StringBuilder sb = new StringBuilder(mEditText.getText().toString());
                         sb.insert(curPosition, emotionName);
 
+                        Log.d(TAG, "onItemClick: "+sb.toString());
                         // 特殊文字处理,将表情等转换一下
                         mEditText.setText(SpanStringUtils.getEmotionContent(emotion_map_type,
                                 mContext, mEditText, sb.toString()));

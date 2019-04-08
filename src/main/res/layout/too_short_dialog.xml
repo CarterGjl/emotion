@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/voice_rcd_hint_tooshort"
+	android:layout_width="170dp"
+	android:layout_height="170dp"
+	android:background="@drawable/release_to_cancel"
+	android:gravity="center"
+	android:orientation="vertical">
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/voice_to_short" />
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="15.0dip"
+		android:text="@string/record_time_too_short"
+		android:layout_marginStart="@dimen/chat_margin"
+		android:layout_marginEnd="@dimen/chat_margin"
+		android:textColor="#ffffffff" />
+</LinearLayout><!--<FrameLayout android:background="@drawable/release_to_cancel"-->    <!--android:layout_width="150dp" android:layout_height="150dp"-->    <!--xmlns:android="http://schemas.android.com/apk/res/android">-->    <!----><!--</FrameLayout>-->
